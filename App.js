@@ -226,6 +226,7 @@ const styles = StyleSheet.create({
     color: "#F9FAFB",
     letterSpacing: 10,
     marginVertical: 20,
+    marginTop: 50,
   },
   attempts: {
     color: "#F9FAFB",
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    marginTop: 10,
+    marginTop: 300,
   },
   letterButton: {
     width: 40,
