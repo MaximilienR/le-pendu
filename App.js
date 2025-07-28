@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Alert,
   SafeAreaView,
+  Platform,
 } from "react-native";
 
 const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
@@ -116,6 +117,78 @@ const WORDS = [
   "ANIMATION",
   "STYLE",
 ];
+const hangmanStages = [
+  [
+    // 0 erreur : vide
+    "   _______",
+    "  |/      |",
+    "  |       ",
+    "  |       ",
+    "  |       ",
+    "  |       ",
+    " _|___",
+  ],
+  [
+    // 1 erreur : tête
+    "   _______",
+    "  |/      |",
+    "  |      (_)",
+    "  |       ",
+    "  |       ",
+    "  |       ",
+    " _|___",
+  ],
+  [
+    // 2 erreurs : tête + tronc
+    "   _______",
+    "  |/      |",
+    "  |      (_)",
+    "  |       |",
+    "  |       |",
+    "  |       ",
+    " _|___",
+  ],
+  [
+    // 3 erreurs : + un bras
+    "   _______",
+    "  |/      |",
+    "  |      (_)",
+    "  |      \\|",
+    "  |       |",
+    "  |       ",
+    " _|___",
+  ],
+  [
+    // 4 erreurs : + deux bras
+    "   _______",
+    "  |/      |",
+    "  |      (_)",
+    "  |      \\|/",
+    "  |       |",
+    "  |       ",
+    " _|___",
+  ],
+  [
+    // 5 erreurs : + une jambe
+    "   _______",
+    "  |/      |",
+    "  |      (_)",
+    "  |      \\|/",
+    "  |       |",
+    "  |      / ",
+    " _|___",
+  ],
+  [
+    // 6 erreurs : pendu complet
+    "   _______",
+    "  |/      |",
+    "  |      (_)",
+    "  |      \\|/",
+    "  |       |",
+    "  |      / \\",
+    " _|___",
+  ],
+];
 const getRandomWord = () => WORDS[Math.floor(Math.random() * WORDS.length)];
 
 export default function HangmanGame() {
@@ -160,22 +233,13 @@ export default function HangmanGame() {
       .split("")
       .map((letter, idx) => (guessedLetters.includes(letter) ? letter : "_"))
       .join(" ");
-
   const renderHangman = () => {
-    const parts = [
-      "🪢", // corde
-      "😵", // tête
-      "👕", // torse
-      "🦵", // jambe gauche
-      "🦿", // jambe droite
-      "🖐️", // bras
-    ];
-
+    const stageIndex = 6 - attemptsLeft;
     return (
-      <View style={styles.hangman}>
-        {parts.slice(0, 6 - attemptsLeft).map((part, index) => (
-          <Text key={index} style={styles.hangmanPart}>
-            {part}
+      <View style={styles.hangmanContainer}>
+        {hangmanStages[stageIndex].map((line, index) => (
+          <Text key={index} style={styles.hangmanLine}>
+            {line}
           </Text>
         ))}
       </View>
@@ -237,7 +301,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-    marginTop: 300,
+    marginTop: 200,
   },
   letterButton: {
     width: 40,
@@ -264,5 +328,16 @@ const styles = StyleSheet.create({
   hangmanPart: {
     fontSize: 28,
     marginHorizontal: 2,
+  },
+
+  hangmanContainer: {
+    marginVertical: 20,
+    alignItems: "flex-start",
+  },
+  hangmanLine: {
+    fontSize: 20,
+    fontFamily: Platform.OS === "ios" ? "Courier" : "monospace",
+    color: "#FACC15",
+    lineHeight: 22,
   },
 });
